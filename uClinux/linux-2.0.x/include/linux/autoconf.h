@@ -118,6 +118,7 @@
  */
 #undef  CONFIG_72001_SERIAL
 #undef  CONFIG_FT245_SERIAL
+#define CONFIG_SCC 1
 #undef  CONFIG_DS1743
 /*
  * Sound support

@@ -153,9 +153,13 @@ enum SCC_TX_KEY {TX_OFF, TX_ON}; /* command for scc_key_trx() */
 #define NULLBUF  (struct mbuf *)0
 #define NULLBUFP (struct mbuf **)0
 
-
+#ifdef CONFIG_MAC_PLUS
+typedef unsigned long io_port;
+typedef unsigned long ioaddr;
+#else
 typedef unsigned short io_port;	/* type definition for an 'io port address' */
 typedef unsigned short ioaddr;  /* old def */
+#endif
 
 #ifdef SCC_DELAY
 #define Inb(port)	inb_p(port)
@@ -608,3 +612,4 @@ struct scc_channel {
 /* global functions */
 
 extern int scc_init(void);
+extern void scc_interrupt(int irq, void *dev_id, struct pt_regs *regs);

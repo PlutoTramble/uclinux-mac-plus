@@ -489,6 +489,9 @@ fi
 if [ "$CONFIG_M68000" = "y" ]; then
 	bool 'NEC uPD72001-11 MPSC serial support' CONFIG_72001_SERIAL
 	bool 'FTDI FT245 serial support' CONFIG_FT245_SERIAL
+	if [ "$CONFIG_MAC_PLUS" = "y" ]; then
+		bool 'Zilog Z8530 SCC serial support' CONFIG_SCC
+	fi
 fi
 
 bool 'DS1743/DS1743P NVRAM/Clock support' CONFIG_DS1743
