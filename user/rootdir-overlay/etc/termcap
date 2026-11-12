@@ -13,3 +13,5 @@ linux-c-nc|linux console 1.3.x hack for ncurses only::cc::..Ic=\E]P%p1%x%p2%{255
 klone+koi8acs|alternate character set for ansi.sys displays with KOI8 charset::ac=+\020\054\021-\036.^_0\215`\004a\237f\234g\232h\222i\220j\205k\203l\202m\204n\212o\213p\216q\0r\217s\214t\206u\207v\210w\211x\201y\230z\231{\267|\274}L~\225::ae=\E[10m:as=\E[11m:
 glasstty|classic glass tty interpreting ASCII control characters::am::co#80::bl=^G:cl=^L:cr=^M:do=^J:kb=^H:kd=^J:kl=^H:le=^H:nw=^M^J::ta=^I:
 lpr|printer|line printer::bs:hc:os::co#132:li#66::bl=^G:cr=^M:do=^J:ff=^L:le=^H:sf=^J:
+vt100|vt100-am|dec vt100:am:mi:ms:xn:xo:co#80:li#24:it#8:bl=^G:cr=^M:do=^J:le=^H:nd=\E[C:up=\E[A:ho=\E[H:cl=\E[H\E[J:cd=\E[J:ce=\E[K:cm=\E[%i%d;%dH:cs=\E[%i%d;%dr:sf=^J:sr=\EM:so=\E[7m:se=\E[m:us=\E[4m:ue=\E[m:md=\E[1m:me=\E[m:mr=\E[7m:ku=\EOA:kd=\EOB:kr=\EOC:kl=\EOD:kb=^H:ta=^I:
+xterm|xterm-256color|xterm terminal emulator:tc=vt100:

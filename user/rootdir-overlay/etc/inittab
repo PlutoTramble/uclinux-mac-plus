@@ -2,3 +2,5 @@
 #pppd listen on /dev/ttyS1
 #s1:linux:/bin/pppd /dev/ttyS1 57600 noauth noipdefault defaultroute
 tty0:linux:/sbin/getty -i 9600 tty0 linux-m
+ttyS0:vt100:/sbin/getty -i 9600 ttyS0 vt100
+ttyS1:vt100:/sbin/getty -i 9600 ttyS1 vt100
