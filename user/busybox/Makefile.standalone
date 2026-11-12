@@ -349,9 +349,9 @@ binaries: $(BINARIES)
 
 $(BINARIES): %: %.standalone.o
 ifdef NOT_IN_UCLINUX_DIST
-	$(CC) $(LDFLAGS) -o $* $*.standalone.o $*.applet.o $(LIBBB_LIB) $(PWD_LIB) $(LIBRARIES)
+	$(CC) $(LDFLAGS) -o $* $*.standalone.o $*.applet.o $(EXTRA_OBJS) $(LIBBB_LIB) $(PWD_LIB) $(LIBRARIES)
 else
-	$(CC) $(LDFLAGS) -o $* $*.standalone.o $*.applet.o $(PWD_LIB) $(LIBBB_LIB) $(LIBRARIES) $(LDLIBS) $(LIBM) $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $* $*.standalone.o $*.applet.o $(EXTRA_OBJS) $(PWD_LIB) $(LIBBB_LIB) $(LIBRARIES) $(LDLIBS) $(LIBM) $(LDLIBS)
 endif
 	-$(STRIPCMD) %*
 
@@ -363,6 +363,15 @@ busybox.links: busybox.mkll $(CONFIG_H) applets.h
 
 #nfsmount.standalone.o cmdedit.standalone.o: %.standalone.o: %.h
 ash.standalone.o hush.standalone.o lash.standalone.o msh.standalone.o: cmdedit.h
+
+ifneq ($(filter cmdedit.c,$(APPLET_SOURCES)),)
+ash hush lash msh: EXTRA_OBJS = cmdedit.o
+ash hush lash msh: cmdedit.o
+endif
+
+cmdedit.o: cmdedit.c cmdedit.h $(CONFIG_H) busybox.h Makefile
+	$(CC) $(CFLAGS) $(ADD_CFLAGS) -I. $(INCLUDES) -c $< -o $@
+
 $(OBJECTS): %.standalone.o: %.c $(CONFIG_H) busybox.h usage.h applet_standalone.c Makefile
 ifeq ($(strip $(BB_SRC_DIR)),)
 	$(CC) $(CFLAGS) $(ADD_CFLAGS) -I. $(INCLUDES) $(patsubst %,-I%,$(subst :, ,$(BB_SRC_DIR))) -DSTANDALONE -D$*_main=main -DAPPLET_NAME=$* -c applet_standalone.c -o $*.applet.o

@@ -271,11 +271,11 @@
 //
 // Enable command line editing in the shell.
 // Only relevant if a shell is enabled. On by default.
-//#define BB_FEATURE_COMMAND_EDITING
+#define BB_FEATURE_COMMAND_EDITING
 //
 // Enable tab completion in the shell.  This is now working quite nicely.
 // This feature adds a bit over 4k. Only relevant if a shell is enabled.
-//#define BB_FEATURE_COMMAND_TAB_COMPLETION
+#define BB_FEATURE_COMMAND_TAB_COMPLETION
 //
 // Attempts to match usernames in a ~-prefixed path
 //#define BB_FEATURE_COMMAND_USERNAME_COMPLETION
