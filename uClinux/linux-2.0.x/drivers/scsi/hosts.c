@@ -579,6 +579,9 @@ unsigned int scsi_init()
 #ifdef CONFIG_CHR_DEV_SG
     scsi_register_device(&sg_template);
 #endif
+#ifdef CONFIG_DAYNAPORT_SCSILINK
+    scsi_register_device(&scsilink_template);
+#endif
     
 #if 0      
     max_scsi_hosts = next_scsi_host;

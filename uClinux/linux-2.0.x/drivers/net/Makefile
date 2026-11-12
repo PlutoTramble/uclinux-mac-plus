@@ -19,6 +19,9 @@ MOD_LIST_NAME := NET_MODULES
 ifneq ($(CONFIG_UCLINUX),y)
 L_OBJS   += auto_irq.o
 endif
+ifeq ($(CONFIG_MAC_PLUS), y)
+L_OBJS   += auto_irq.o
+endif
 ifeq ($(CONFIG_COLDFIRE),y)
 L_OBJS   += auto_irq.o
 endif

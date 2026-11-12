@@ -54,7 +54,7 @@
 #define BB_HOSTNAME
 //#define BB_HUSH
 #define BB_ID
-//#define BB_IFCONFIG
+#define BB_IFCONFIG
 #define BB_INIT
 #define BB_INSMOD
 #define BB_KILL
@@ -88,7 +88,7 @@
 //#define BB_NC
 //#define BB_NSLOOKUP
 #define BB_PIDOF
-//#define BB_PING
+#define BB_PING
 //#define BB_PIVOT_ROOT
 //#define BB_POWEROFF
 #define BB_PRINTF
@@ -102,7 +102,7 @@
 #define BB_RM
 #define BB_RMDIR
 #define BB_RMMOD
-//#define BB_ROUTE
+#define BB_ROUTE
 //#define BB_RPM2CPIO
 #define BB_SED
 //#define BB_SETKEYCODES
@@ -116,7 +116,7 @@
 //#define BB_TAR
 #define BB_TEE
 #define BB_TEST
-//#define BB_TELNET
+#define BB_TELNET
 //#define BB_TFTP
 #define BB_TIME
 //#define BB_TOP
@@ -333,7 +333,7 @@
 //#define BB_FEATURE_MINIX2
 //
 // Enable ifconfig status reporting output -- this feature adds 7k.
-//#define BB_FEATURE_IFCONFIG_STATUS
+#define BB_FEATURE_IFCONFIG_STATUS
 //
 // Enable ifconfig slip-specific options "keepalive" and "outfill"
 //#define BB_FEATURE_IFCONFIG_SLIP

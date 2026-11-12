@@ -72,7 +72,7 @@
  * General setup
  */
 #undef  CONFIG_PCI
-#undef  CONFIG_NET
+#define CONFIG_NET 1
 #define CONFIG_SYSVIPC 1
 #define CONFIG_REDUCED_MEMORY 1
 #define CONFIG_BINFMT_FLAT 1
@@ -95,6 +95,13 @@
 #define CONFIG_BLK_DEV_INITRD 1
 #undef  CONFIG_DEV_FLASH
 #undef  CONFIG_BLK_DEV_NFA
+/*
+ * Network device support
+ */
+#define CONFIG_INET 1
+#define CONFIG_DUMMY 1
+#define CONFIG_NETDEVICES 1
+#define CONFIG_IP_NOSR 1
 /*
  * Filesystems
  */
@@ -132,3 +139,4 @@
 /* uwu */
 #define CONFIG_SCSI 1
 #define CONFIG_BLK_DEV_SD 1
+#define CONFIG_DAYNAPORT_SCSILINK 1

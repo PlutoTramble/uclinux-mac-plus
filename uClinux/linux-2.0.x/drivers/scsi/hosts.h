@@ -359,6 +359,7 @@ extern struct Scsi_Device_Template sd_template;
 extern struct Scsi_Device_Template st_template;
 extern struct Scsi_Device_Template sr_template;
 extern struct Scsi_Device_Template sg_template;
+extern struct Scsi_Device_Template scsilink_template;
 
 int scsi_register_device(struct Scsi_Device_Template * sdpnt);
 

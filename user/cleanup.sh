@@ -46,12 +46,16 @@ rm busybox/find
 rm busybox/free
 rm busybox/head
 rm busybox/id
+rm busybox/ifconfig
 rm busybox/kill
 rm busybox/md5sum
+rm busybox/ping
 rm busybox/printf
 rm busybox/reset
+rm busybox/route
 rm busybox/tail
 rm busybox/tee
+rm busybox/telnet
 rm busybox/time
 rm busybox/uptime
 rm busybox/wc

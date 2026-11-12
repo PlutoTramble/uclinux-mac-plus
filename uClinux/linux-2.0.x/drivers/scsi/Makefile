@@ -444,6 +444,14 @@ ifeq ($(CONFIG_MAC_PLUS),y)
 L_OBJS += mac_NCR5380.o
 endif
 
+ifeq ($(CONFIG_DAYNAPORT_SCSILINK),y)
+L_OBJS += scsilink.o
+else
+  ifeq ($(CONFIG_DAYNAPORT_SCSILINK),m)
+  M_OBJS += scsilink.o
+  endif
+endif
+
 include $(TOPDIR)/Rules.make
 
 aha152x.o: aha152x.c
