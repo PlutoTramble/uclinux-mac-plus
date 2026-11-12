@@ -365,7 +365,7 @@
 //#define BB_FEATURE_CLEAN_UP
 //
 // Support for human readable output by ls, du, etc.(example 13k, 23M, 235G)
-//#define BB_FEATURE_HUMAN_READABLE
+#define BB_FEATURE_HUMAN_READABLE
 //
 // Support for the find -type option.
 //#define BB_FEATURE_FIND_TYPE
