@@ -156,7 +156,7 @@
 #undef  SCC_LDELAY 1	/* slow it even a bit more down */
 #undef  DONT_CHECK	/* don't look if the SCCs you specified are available */
 
-#define MAXSCC          2       /* number of max. supported chips */
+#define MAXSCC          4       /* number of max. supported chips */
 #define RXBUFFERS       8       /* default number of RX buffers */
 #define TXBUFFERS       8       /* default number of TX buffers */
 #define BUFSIZE         384     /* must not exceed 4096-sizeof(mbuf) */
@@ -226,53 +226,8 @@ void cleanup_module(void);
 #endif
 
 #if !defined(CONFIG_SCC_DEV) && !defined(CONFIG_SCC_TTY)
-#undef CONFIG_SCC_DEV
+#define CONFIG_SCC_DEV
 #define CONFIG_SCC_TTY
-#endif
-
-#ifdef CONFIG_MAC_PLUS
-#include <../arch/m68knommu/platform/68000/MacPlus/mac_hw.h>
-
-/*
- * All logical ports use read-side addresses:
- * B control +0, A control +2, B data +4, A data +6.
- */
-static __inline__ int mac_scc_valid_port(io_port port)
-{
-	return port == MAC_SCC_RD_BASE ||
-		   port == MAC_SCC_RD_BASE + 2 ||
-		   port == MAC_SCC_RD_BASE + 4 ||
-		   port == MAC_SCC_RD_BASE + 6;
-}
-
-static __inline__ unsigned char mac_scc_inb(io_port port)
-{
-	unsigned char value;
-
-	if (!mac_scc_valid_port(port))
-		return 0;
-
-	value = *(volatile unsigned char *)port;
-	udelay(1);
-	return value;
-}
-
-static __inline__ void mac_scc_outb(io_port port, unsigned char value)
-{
-	io_port write_port;
-
-	if (!mac_scc_valid_port(port))
-		return;
-
-	write_port = MAC_SCC_WR_BASE + (port - MAC_SCC_RD_BASE);
-	*(volatile unsigned char *)write_port = value;
-	udelay(1);
-}
-
-#undef Inb
-#undef Outb
-#define Inb(port) mac_scc_inb(port)
-#define Outb(port, val) mac_scc_outb((port), (val))
 #endif
 
 int scc_init(void);
@@ -1229,28 +1184,6 @@ scc_isr(int irq, void *dev_id, struct pt_regs *regs)
 	
 	scc_sti(irq);
 }
-
-#ifdef CONFIG_MAC_PLUS
-void scc_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
-	unsigned long flags;
-
-	save_flags(flags);
-	cli();
-
-	if (!Driver_Initialized || Nchips == 0) {
-		/*
-		 * No configured driver can acknowledge this interrupt.
-		 * Reset register selection, then disable chip-wide MIE.
-		 */
-		(void)Inb(MAC_SCC_RD_BASE);
-		OutReg(MAC_SCC_RD_BASE, R9, 0);
-	} else {
-		scc_isr(irq, dev_id, regs);
-	}
-
-	restore_flags(flags);
-}
-#endif
 
 
 
@@ -2506,11 +2439,7 @@ scc_ioctl(struct scc_channel *scc, unsigned int cmd, void *arg)
 				Vector_Latch = hwcfg.vector_latch;
 
 			if (hwcfg.clock == 0)
-#ifdef CONFIG_MAC_PLUS
-				hwcfg.clock = MAC_SCC_PCLK;
-#else
 				hwcfg.clock = DEFAULT_CLOCK;
-#endif
 
 #ifndef DONT_CHECK
 			disable_irq(hwcfg.irq);

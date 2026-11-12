@@ -39,7 +39,6 @@
 #include <linux/mm.h>
 #include <linux/tty.h>
 #include <linux/console.h>
-#include <linux/scc.h>
 
 #include <asm/setup.h>
 #include <asm/system.h>
@@ -177,20 +176,44 @@ static void via_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
     }*/
 }
 
+// SCC interrupt (currently disabled)
+static void scc_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
+    u_char flags;
 
-// VIA+SCC interrupt: both chips are asserting, service both
+    // get modified interrupt vector (rr2b)
+    read_addr(MAC_SCC_B_CTL_RD);
+    asm volatile("nop"); // artificial delay to make sure scc stabilizes? not sure if this is too much or not enough
+    MAC_SCC_B_CTL_WR = 2;
+    asm volatile("nop");
+    flags = 0xe & MAC_SCC_B_CTL_RD;
+
+    // handle the interrupt
+    switch (flags) {
+        case 0x0a:
+            printk("horizontal mouse movement\n");
+            break;
+        case 0x02:
+            printk("vertical mouse movement\n");
+            break;
+        default:
+            printk("unknown scc interrupt %02x\n", flags);
+            break;
+    }
+
+    // reset interrupts (not sure why this doesn't work)
+    read_addr(MAC_SCC_B_CTL_RD); // reset to register 0
+    asm volatile("nop");
+
+    /*MAC_SCC_B_CTL_WR = 0x38;
+    asm volatile("nop");*/
+    MAC_SCC_B_CTL_WR = 0x10; // reset ext/status interrupts
+}
+
+// VIA+SCC interrupt
 static void via_scc_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
-    via_interrupt(irq, dev_id, regs);
-#ifdef CONFIG_SCC
-    scc_interrupt(MAC_INT_NUM_SCC - VEC_SPUR, dev_id, regs);
-#else
-    // no serial driver: keep the SCC quiet (hardware reset, interrupts off)
-    read_addr(&MAC_SCC_B_CTL_RD); // reset to register 0
-    asm volatile("nop");
-    MAC_SCC_B_CTL_WR = 9; // select register 9
-    asm volatile("nop");
-    MAC_SCC_B_CTL_WR = 0xc0; // set d7 and d6, causing the scc to reset
-#endif
+    printk("via + scc interrupt?\n");
+    //via_interrupt(irq, dev_id, regs);
+    //scc_interrupt(irq, dev_id, regs);
 }
 #endif
 

@@ -297,7 +297,6 @@ extern int specialix_init(void);
 extern int baycom_init(void);
 extern int mcfrs_init(void);
 extern int rs68328_init(void);
-extern int scc_init(void);
 extern int rs68332_init(void);
 extern int lc7981_init(void);
 extern int tpu_68332_init(void);

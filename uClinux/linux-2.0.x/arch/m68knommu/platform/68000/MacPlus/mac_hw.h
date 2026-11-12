@@ -86,7 +86,6 @@
 // SCC
 #define MAC_SCC_RD_BASE     0x9ffff8
 #define MAC_SCC_WR_BASE     0xbffff9
-#define MAC_SCC_PCLK        3672000 // SCC clock in Hz (used by the baud rate generator)
 
 #define MAC_SCC_A_DATA_RD   (*((volatile u_char *) (MAC_SCC_RD_BASE + 0x6))) // SCC channel A data read
 #define MAC_SCC_A_DATA_WR   (*((volatile u_char *) (MAC_SCC_WR_BASE + 0x6))) // SCC channel A data write
