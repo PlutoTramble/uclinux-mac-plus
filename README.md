@@ -27,8 +27,13 @@ you can boot the image in MAME by running a command like `mame macplus -hard1 $(
 - SCSI controller
 - sound
 - serial : modem port = `/dev/ttyS0`, printer port = `/dev/ttyS1`
+- Daynaport SCSI to ethernet adapter
 
 ## what doesn't
 - mouse
 - floppy drives
 - a bunch more things, probably
+
+## Acknowledgements
+
+Huge thanks to [Jeff Flitton](https://github.com/jflitton) for providing the [Daynaport scsilink linux driver](https://github.com/jflitton/daynaport-scsilink-linux-driver), licensed under [GPLv2](https://github.com/jflitton/daynaport-scsilink-linux-driver/blob/main/COPYING).

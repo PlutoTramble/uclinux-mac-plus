@@ -108,4 +108,7 @@ fi
 dep_tristate 'UltraStor SCSI support' CONFIG_SCSI_ULTRASTOR $CONFIG_SCSI
 dep_tristate 'GDT SCSI Disk Array Controller support' CONFIG_SCSI_GDTH $CONFIG_SCSI
 #dep_tristate 'SCSI debugging host adapter' CONFIG_SCSI_DEBUG $CONFIG_SCSI
+
+bool 'DaynaPORT SCSI/Link SCSI-to-Ethernet adapter' CONFIG_DAYNAPORT_SCSILINK
+
 endmenu

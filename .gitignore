@@ -128,3 +128,8 @@ uClinux/romfs
 /user/sh_utils/whoami
 /user/sh_utils/xargs
 /user/sh_utils/yes
+
+/user/busybox/ping
+/user/busybox/route
+/user/busybox/telnet
+/user/busybox/ifconfig
