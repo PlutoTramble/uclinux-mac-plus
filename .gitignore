@@ -133,3 +133,5 @@ uClinux/romfs
 /user/busybox/route
 /user/busybox/telnet
 /user/busybox/ifconfig
+
+user/cc/build/
