@@ -186,4 +186,7 @@ chmod 755 ${ROOTDIR}/usr/bin/*
 makeIn mplay all
 copy mplay/mplay "${ROOTDIR}/bin/"
 
+# the C compiler that runs on the Mac (GCC 1.42 + as + ld + cc, libraries, headers)
+ROOTDIR="${ROOTDIR}" ./cc/build.sh
+
 makeIn ../bootloader boot_block.bin
