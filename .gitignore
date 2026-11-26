@@ -129,6 +129,9 @@ uClinux/romfs
 /user/sh_utils/xargs
 /user/sh_utils/yes
 
+/build-logs/
+/buildenv/toolchain-include/
+
 /user/busybox/ping
 /user/busybox/route
 /user/busybox/telnet

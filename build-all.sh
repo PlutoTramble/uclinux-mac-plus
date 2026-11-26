@@ -16,3 +16,6 @@ echo "### Step 2/3: userland programs -> user/rootdir"
 
 echo "### Step 3/3: disk image -> user/root.img"
 ./user/buildfs.sh
+
+echo "### Generating compile_commands.json for CLion"
+python3 buildenv/gen_compile_commands.py
