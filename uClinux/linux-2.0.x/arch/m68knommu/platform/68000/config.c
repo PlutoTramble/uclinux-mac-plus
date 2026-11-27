@@ -129,9 +129,21 @@ static u_char read_addr(volatile u_char *addr) {
     return *addr;
 }
 
+#ifdef CONFIG_ZILOG_SCC_SERIAL
+extern void zilog_scc_interrupt(int irq, void *dev_id, struct pt_regs *regs);
+#endif
+
+static volatile int via_in_irq;
+
 // VIA interrupt
 static void via_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
-    register u_char flag = MAC_VIA_IFR;
+    register u_char flag;
+
+    if (via_in_irq)
+        return; // nested through IPL3: the outer call (or the next IPL1) handles it
+    via_in_irq = 1;
+
+    flag = MAC_VIA_IFR;
     MAC_VIA_IFR = 0xff; // clear interrupt flags
 
     // call interrupt handler based on interrupt flags
@@ -174,46 +186,23 @@ static void via_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
         // 1 second interrupt
         printk("1 second int\n");
     }*/
+
+    via_in_irq = 0;
 }
 
-// SCC interrupt (currently disabled)
-static void scc_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
-    u_char flags;
-
-    // get modified interrupt vector (rr2b)
-    read_addr(MAC_SCC_B_CTL_RD);
-    asm volatile("nop"); // artificial delay to make sure scc stabilizes? not sure if this is too much or not enough
-    MAC_SCC_B_CTL_WR = 2;
-    asm volatile("nop");
-    flags = 0xe & MAC_SCC_B_CTL_RD;
-
-    // handle the interrupt
-    switch (flags) {
-        case 0x0a:
-            printk("horizontal mouse movement\n");
-            break;
-        case 0x02:
-            printk("vertical mouse movement\n");
-            break;
-        default:
-            printk("unknown scc interrupt %02x\n", flags);
-            break;
-    }
-
-    // reset interrupts (not sure why this doesn't work)
+// VIA+SCC interrupt: both chips are asserting, service both
+static void via_scc_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
+    via_interrupt(irq, dev_id, regs);
+#ifdef CONFIG_ZILOG_SCC_SERIAL
+    zilog_scc_interrupt(irq, dev_id, regs);
+#else
+    // no serial driver: keep the SCC quiet (hardware reset, interrupts off)
     read_addr(MAC_SCC_B_CTL_RD); // reset to register 0
     asm volatile("nop");
-
-    /*MAC_SCC_B_CTL_WR = 0x38;
-    asm volatile("nop");*/
-    MAC_SCC_B_CTL_WR = 0x10; // reset ext/status interrupts
-}
-
-// VIA+SCC interrupt
-static void via_scc_interrupt(int irq, void *dev_id, struct pt_regs *regs) {
-    printk("via + scc interrupt?\n");
-    //via_interrupt(irq, dev_id, regs);
-    //scc_interrupt(irq, dev_id, regs);
+    MAC_SCC_B_CTL_WR = 9; // select register 9
+    asm volatile("nop");
+    MAC_SCC_B_CTL_WR = 0xc0; // set d7 and d6, causing the scc to reset
+#endif
 }
 #endif
 
@@ -260,8 +249,7 @@ BSP_sched_init(void (*timer_routine)(int, void *, struct pt_regs *))
 
     request_irq(MAC_INT_NUM_VIA - VEC_SPUR,
                 via_interrupt, IRQ_FLG_LOCK, "via", NULL);
-    request_irq(MAC_INT_NUM_SCC - VEC_SPUR,
-                scc_interrupt, IRQ_FLG_LOCK, "scc", NULL);
+    // the SCC IPL2 interrupt (MAC_INT_NUM_SCC) is requested by the zilog_scc serial driver
     request_irq(MAC_INT_NUM_VIA_SCC - VEC_SPUR,
                 via_scc_interrupt, IRQ_FLG_LOCK, "via-and-scc", NULL);
 

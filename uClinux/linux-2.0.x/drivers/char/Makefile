@@ -495,6 +495,10 @@ ifeq ($(CONFIG_FT245_SERIAL),y)
 L_OBJS += ft245.o
 endif
 
+ifeq ($(CONFIG_ZILOG_SCC_SERIAL),y)
+L_OBJS += zilog_scc.o
+endif
+
 include $(TOPDIR)/Rules.make
 
 fastdep: uni_hash.tbl
